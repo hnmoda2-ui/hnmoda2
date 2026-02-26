@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's profile in the system.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Whether the user has admin privileges."
+        }
+      },
+      "required": ["email"]
+    },
+    "galleryItem": {
+      "title": "Gallery Item",
+      "description": "An item in the gallery, which can include multiple images and a video.",
+      "type": "object",
+      "properties": {
+        "productCode": {
+            "type": "string",
+            "description": "A unique sequential code for the product, e.g., '0001'."
+        },
+        "name": {
+            "type": "string",
+            "description": "Name of the gallery item."
+        },
+        "description": {
+            "type": "string",
+            "description": "A detailed description of the gallery item."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the primary thumbnail image."
+        },
+        "imageUrl2": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: URL for the 2nd image."
+        },
+        "imageUrl3": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: URL for the 3rd image."
+        },
+        "imageUrl4": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: URL for the 4th image."
+        },
+        "videoUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional URL for a promotional video (e.g., YouTube, Vimeo)."
+        },
+        "category": {
+            "type": "string",
+            "enum": ["models", "collections", "products"],
+            "description": "The category of the work item."
+        },
+        "itemType": {
+            "type": "string",
+            "description": "The type of clothing, e.g., 'Dress', 'Shirt', 'Trousers'."
+        },
+        "season": {
+            "type": "string",
+            "enum": ["Spring/Summer", "Fall/Winter", "All-Season"],
+            "description": "The fashion season this item belongs to."
+        },
+        "inventoryStatus": {
+            "type": "string",
+            "enum": ["available", "sold out", "by request"],
+            "description": "The availability status of the product."
+        },
+        "price": {
+            "type": "number",
+            "description": "Price of the product. Should only be set if category is 'products'."
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of creation."
+        }
+      },
+      "required": ["url", "category", "name", "createdAt", "inventoryStatus", "itemType", "season"]
+    },
+    "siteConfig": {
+        "title": "Site Configuration",
+        "description": "Stores global site configuration data like contact info.",
+        "type": "object",
+        "properties": {
+            "whatsappNumber": {"type": "string"},
+            "phone": {"type": "string"},
+            "email": {"type": "string", "format": "email"},
+            "telegram": {"type": "string"},
+            "address": {"type": "string"}
+        },
+        "required": ["whatsappNumber", "phone", "email", "address"]
+    }
+  },
+  "auth": {
+    "providers": ["password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/userProfile"
+      },
+      "description": "Stores public user profile information."
+    },
+    "/gallery/{itemId}": {
+        "schema": {
+            "$ref": "#/entities/galleryItem"
+        },
+        "description": "Stores all gallery items, including images and videos."
+    },
+    "/configs/contact": {
+        "schema": {
+            "$ref": "#/entities/siteConfig"
+        },
+        "description": "Stores contact information that can be managed from the admin panel."
+    }
+  }
+}
